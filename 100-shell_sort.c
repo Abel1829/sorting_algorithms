@@ -1,48 +1,41 @@
-
-
 #include "sort.h"
+
 /**
- * shell_sort - function that sorts an array
- * of integers in ascending order using the
- * Shell sort algorithm
- *
- * @array: input arrray
+*swap - the positions of two elements into an array
+*@array: array
+*@item1: array element
+*@item2: array element
+*/
+void swap(int *array, int item1, int item2)
+{
+
+	int tmp;
+
+	tmp = array[item1];
+	array[item1] = array[item2];
+	array[item2] = tmp;
+}
+/**
+ * shell_sort - function that sorts an array of integers in ascending
+ * order using the Shell sort algorithm, using the Knuth sequence
  * @size: size of the array
- * Return: no return
+ * @array: list with numbers
  */
 void shell_sort(int *array, size_t size)
 {
-	size_t n = 1;
+	size_t gap = 1, i, index = 0;
 
-	while (n < size)
-		n = (n * 3) + 1;
-
-	while ((n = (n - 1) / 3) > 0)
-		_ssort(array, size, n);
-}
-/**
- * _ssort - auxiliar function for
- * shell_sort function
- * @a: input arrray
- * @size: size of the array
- * @n: intervale
- * Return: no return
- */
-void _ssort(int *a, int size, int n)
-{
-	int tmp, i, j;
-
-	for (i = 0; (i + n) < size; i++)
+	if (array == NULL || size < 2)
+		return;
+	while (gap < size / 3)
+		gap = 3 * gap + 1;
+	while (gap >= 1)
 	{
-		for (j = i + n; (j - n) >= 0; j = j - n)
-		{
-			if (a[j] < a[j - n])
-			{
-				tmp = a[j];
-				a[j] = a[j - n];
-				a[j - n] = tmp;
-			}
-		}
+		for (i = gap; i < size; i++)
+			for (index = i; index >= gap &&
+			 (array[index] < array[index - gap]); index -= gap)
+				swap(array, index, index - gap);
+		print_array(array, size);
+		gap /= 3;
 	}
-	print_array(a, size);
 }
